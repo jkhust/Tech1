@@ -1,0 +1,267 @@
+issues:
+-------
+
+NEXT:  
+  better validation on envaccess, vec3brackets during lexing
+  toString on floatliteral should do 4 decimal places
+  report AST validation errors to an ostream?
+  force draw to use a vector as param?
+  
+  change token execute to (env, oss, sys=NULL, game=NULL), so that unit tests
+    can be written without sys or game.
+
+  ant script - randomly roams around, turns, moves, draws self
+
+  lexExpectedColon for lexing environment access?
+  decide how scripting's .x, .y, .z are going to work.
+  sin, cos scripting
+  vec3 rotX, rotY, rotZ scripting
+  rot2D needs to keep neg y direction on top
+  abs scripting
+  scripting vmag, vnorm, vdist
+  
+  variant vec3 +=, -=, *=, /=, +, -, *, /
+  
+  system tests into own module?
+
+  @sys:key_a
+  @sys:key_b
+  (exec @keys.left)
+  then sys.exec("exec @sys.collideSound")
+
+  system call to draw a line between two points in a certain color.
+  how to rotate an image in SDL?
+
+INPUT
+  firework script using random numbers, draw, and playsound - spawns additional
+    entities
+  fireball script
+  screenshake
+  flash color
+  spiral outward script
+  script exec a string which is another script?
+
+  comparators
+
+  variant arithmetic and appending
+
+  consts
+
+  timesequals bug
+  script command for printText, used for GUIs.
+
+  how does a script call another script instance?  (probably shouldn't?)
+
+  resources:
+    TestDraw c++ can hook to different resource point to keep test resource
+      tree separate from game resource tree
+
+  when drawing wrong sprite, use an [X] "missing.png"
+  
+  fix memleaks in script parsing, lexing, unit tests, etc.
+        
+  testanimate broken?
+  what's return type of an identifier?  (depends what its initialized to.)
+  
+  all floats to doubles? does it help/matter?
+  
+console
+  load font from file as series of sprites
+  sit as layer above the current game state.
+  ability to send commands
+  
+input  
+  gamepad buttons to script bindings
+  
+annoyances
+  (float f j)
+  (= f j)
+  having to use (float f 123.0) instead of (float f 123)
+  (= i f) should cast to integer
+  not being able to re-use the parser.
+  basically, make it strongly typed.
+  
+scripting
+  (toint "hello") (toint 5.12)
+  (tofloat 5)
+  (tostring 5) (tostring 7.12)
+  (progn (int i 7) (*= i 8.1))
+  escaped quotes
+  (= @sys:frameTicks 10)   assign to envaccess
+  
+game
+  game states
+  
+variant & scripting
+  typecasting during variant == 0  (numeric==numeric) and (0==0)
+  upcast int to float
+  downcast float to int for compare
+  upcast int to float for compare
+  (#uses globals), (#uses player) access directives?
+
+lexer
+  ability to reset lexer stream
+
+video
+  read SDL2 video guide
+  gray background
+  fullscreen mode toggle
+  obj loader with textures.
+  
+@sys
+  frameTicks
+  screenResolution
+  musicVolume
+  soundVolume
+  etc
+  
+@game
+  difficulty
+  cameraPos vector
+  
+resourcemgr
+  ability to hook resource mgr to different resource points/folders
+  lcase the resources when looked up and added.
+  load on demand?
+  autoreg sprites horizontally from an image
+  ability to register and unregister from script
+
+clock
+  timers that can be registered to fire periodically as callback functions.
+
+message queue
+  ability to post and process messages
+  
+
+portability
+  own string, map, no operator overloading.
+  trying to make too user-friendly in terms of script verification.
+  one clock, one reporter, multi resourcemgr, one lexer, one parser.
+  
+  
+BIG FEATURES TO IMPLEMENT FROM OTHER PROJECTS
+-----------------------------
+3d world with 3D camera
+OBJ rendering
+MD2 rendering
+MS3D rendering
+command console with font rendering
+scripting - all scripts from before must work
+
+
+done:
+----
+12/30
+CUT create vec3 via (vec3 pos [1 2 3]) notation
+CUT create Vec3 via script
+
+
+12/29
+CUT Variant delegate mag(), normalize()
+CUT vec3 equality, inequality
+CUT vec3 normalize
+change envAccess format to @sys:frameTicks, not @sys.frameTicks
+CUT Vec3 += -= *= /=
+CUT vec3 scaling
+CUT vec3 subscript
+code and unit tests for vector add, subtract, distance
+code and unit tests for vector length
+allow script name in addition to defuns
+code and unit tests for vector creation
+
+12/27
+report registration of resources
+sys.init, sys.shutdown
+
+12/23
+code and unit tests for a sys.exec("playsound \"sounds/hello.wav\""), which can 
+  be used by the dev console once it's implemented.
+unit tests for hasFunction
+if hasFunction("__init__")  call("__init__") a la Python.
+create script from sys auto-binds the script instance to the system's script 
+  channel for output.
+Acceptance tests for file-based script test_1.scr  
+Unit test for script instance.  Can run think and render repeatedly.
+ScriptResource object
+scriptinstance object
+an ALL channel for the reporter to use.
+Took away the extra level of indirection for the reporter.
+  (no need for a reportChannel for each.  can just use ostreams)
+
+12/22
+SCRIPT token ->call("myFunc", ...) and unit tests
+SCRIPT token. can only have DEFUN children.  execute() by default
+  executes (defun "main" ...)
+DEFUN token.  Execute() executes its 2nd child - the actual code.
+@sys.frameTicks mechanism for envAccess from scripts - tricky due to no closing
+  delimiter
+(int i @sys.frameticks)
+
+12/19 - all day on scripting code again
+code & unit tests for random float (randf -5.0f 5.0f)
+code & unit tests for random int (randi -5 5)
+code and unit tests for (while cond (...))
+code and unit tests for dotimes keyword
+assert valid screen before draw
+code and unit tests for ++, --, +=, -=, /= 
+code unit tests for and, or not
+Created tokens and lexer code for and, or not logical operators
+unit tests for script comments
+renamed tests to TestCore / TestDraw / TestAnimate / TestScriptFlat and 
+  refactored folder structure
+system draw command which can be called by draw token's execute
+draw token
+assign operator unit tests
+
+12/18 - all day on scripting code
+implementation and unit tests for equals, not equals
+declare() should check for duplicate declaration - map already does
+Token return types, for better validation before execution
+sys wrapper which bundles clock, reporter, resourceMgr, envMgr.
+  Simplifies token execution
+PlaySound token type with execution and unit tests.  Works great.
+if statement execution and unit tests
+identifiers must look up localenv value (with unit tests)
+set windowed resolution to phone size 1136x640
+declarations with no value (bool b) (int i) (float f) (string s)
+execution unit tests for bool, int, float, string declarations
+execution unit tests for booleanliteral, intliteral, floatliteral, stringliteral
+unit tests for execute of progn, print, println
+lex print, println tokens
+declaration of bool, int, float, string execute execute
+execute on literals bool, int, float, string
+progn execute all children
+return variant on execute
+environment declare, not define.
+return Entity nomenclature to Environment
+
+12/17
+basic parse code of LISP nested structure, uses lexer to build AST.
+lexing of comparators == != < <= > >=
+lex + and ++
+
+12/16
+port lexing code for bool, int, float, string declarators
+port lexing for floats, parens
+entityMgr with unit tests
+entity class - entity is an environment of vars.
+
+12/15
+animation test demo (goomba walking)
+register and draw sprites from an image resource
+lex strings
+lex ints
+lex idents, booleans, if
+basic code for variant and environment
+
+12/12
+ability to register and play sounds
+images load correctly now in test cases
+fix makefile
+import system and clock, and get frameTicks, frameSecs working.
+unit test for clock wait, clock move
+reporter needs to use streamed output
+
+
+
+

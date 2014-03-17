@@ -1,0 +1,2 @@
+Register images/bomb.png
+Register sounds/explodelow.wav

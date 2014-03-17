@@ -1,0 +1,1 @@
+Video init 640x480...OK.

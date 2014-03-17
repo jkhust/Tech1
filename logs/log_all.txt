@@ -1,0 +1,5 @@
+[System] System init...[System] OK.
+[Video] Video init 640x480...[Video] OK.
+[Audio] Audio init...[Audio] OK.
+[Resources] Register images/bomb.png
+[Resources] Register sounds/explodelow.wav
